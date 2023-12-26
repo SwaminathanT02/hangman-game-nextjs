@@ -47,10 +47,15 @@ const SignIn = () => {
             Email: email,
             Password: password,
         });
-
-        if (result?.error) {
-            setEmailError(true)
+        if (result?.error === "CredentialsSignin") {
+            setEmailError(true);
             setEmailErrorText("Invalid email or password");
+        } else if (result?.error === "Error: Illegal arguments: string, undefined") {
+            setEmailError(true);
+            setEmailErrorText("Email is registered with Google. Please use Google login.");
+        } else if (result?.error) {
+            setEmailError(true);
+            setEmailErrorText("Something went wrong. Please try again later.");
         } else {
             setEmailError(false);
             setEmailErrorText("");
@@ -73,7 +78,7 @@ const SignIn = () => {
                             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
                                 <LockOutlinedIcon />
                             </Avatar>
-                            <Typography component="h1" variant="h5">
+                            <Typography component="h1" variant="h5" sx={{ fontFamily: 'fantasy' }}>
                                 Sign in
                             </Typography>
                             <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
