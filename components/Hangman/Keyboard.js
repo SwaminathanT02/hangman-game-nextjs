@@ -19,7 +19,7 @@ const Keyboard = ({ handleGuess, gameOver, guessedLetters }) => {
                     onClick={() => handleGuess(letter.toLowerCase())}
                     disabled={gameOver}
                     sx={{
-                        fontSize: { xs: "0.8rem", md: "1rem" },
+                        fontSize: { xs: "0.6rem", md: "0.8rem" },
                         padding: { xs: "0.5rem 0.1rem", md: "1rem 0.7rem" },
                         backgroundColor: guessedLetters.has(letter.toLowerCase()) ? "darkgray" : "white",
                         color: "black",
