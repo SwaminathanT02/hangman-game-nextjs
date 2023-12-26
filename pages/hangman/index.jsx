@@ -52,9 +52,6 @@ const Hangman = ({ user }) => {
                 const userScore = await GetDBScore(user.email);
                 setScore(userScore);
             }
-            else {
-                await UpdateDBScore(user.email, score);
-            }
             setSelectedWord(wordAndMeaning.word);
             setWordMeanings(wordAndMeaning.meaning);
             setGuessedWord(Array(wordAndMeaning.word.length).fill('_'));
@@ -86,9 +83,16 @@ const Hangman = ({ user }) => {
                     setGuessedLetters((prevGuessedLetters) => new Set(prevGuessedLetters).add(letter));
                 }
                 if (mistakes + 1 === totalTries) {
-                    setScore(Math.max((score || 0) - 2, 0));
-                    await UpdateDBScore(user.email, score);
-                    setGameOver(true);
+                    try {
+                        setLoading(true);
+                        setGameOver(true);
+                        setScore(Math.max((score || 0) - 2, 0));
+                        await UpdateDBScore(user.email, Math.max((score || 0) - 2, 0));
+                    } catch (error) {
+                        console.error(error)
+                    } finally {
+                        setLoading(false);
+                    }
                 }
             } else {
                 if (!guessedLetters.has(letter)) {
@@ -96,9 +100,16 @@ const Hangman = ({ user }) => {
                 }
                 setGuessedWord(updatedGuessedWord);
                 if (updatedGuessedWord.join('') === selectedWord) {
-                    setScore((score || 0) + 5);
-                    await UpdateDBScore(user.email, score);
-                    setGameOver(true);
+                    try {
+                        setLoading(true);
+                        setGameOver(true);
+                        setScore((score || 0) + 5);
+                        await UpdateDBScore(user.email, (score || 0) + 5);
+                    } catch (error) {
+                        console.error(error)
+                    } finally {
+                        setLoading(false);
+                    }
                 }
             }
         }
