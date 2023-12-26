@@ -7,7 +7,7 @@ export const getServerSideProps = async (context) => {
         return {
             redirect: {
                 permanent: false,
-                destination: "/login?callbackUrl=%2Fprotected",
+                destination: "/login?callbackUrl=%2Fleaderboard",
             }
         };
     }
