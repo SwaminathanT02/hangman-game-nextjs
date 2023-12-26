@@ -6,11 +6,28 @@
     "start": "next start"
   },
   "dependencies": {
+    "@auth/mongodb-adapter": "^2.0.9",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.15.1",
+    "@mui/material": "^5.15.1",
+    "axios": "^1.6.2",
+    "bcryptjs": "^2.4.3",
+    "framer-motion": "^10.16.16",
+    "mongodb": "^6.3.0",
+    "mongoose": "^8.0.3",
     "next": "latest",
+    "next-auth": "^4.24.5",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-spring": "^9.7.3"
   },
   "engines": {
     "node": ">=18"
-  }
+  },
+  "name": "hangman-game-20",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "SwaminathanT02 <swaminathant02@gmail.com>",
+  "license": "MIT"
 }
