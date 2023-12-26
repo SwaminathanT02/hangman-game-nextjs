@@ -23,12 +23,14 @@ export const authOptions = {
                 try {
                     const user = await User.findOne({ Email: credentials.Email });
                     if (user) {
-                        const isPasswordCorrect = await bcrypt.compare(
-                            credentials.Password,
-                            user.Password
-                        );
-                        if (isPasswordCorrect) {
-                            return user;
+                        if ('Password' in user) {
+                            const isPasswordCorrect = await bcrypt.compare(
+                                credentials.Password,
+                                user.Password
+                            );
+                            if (isPasswordCorrect) {
+                                return user;
+                            }
                         }
                     }
                     return null;

@@ -1,4 +1,4 @@
-import { Container, Typography, Paper, List, ListItem, Button } from "@mui/material";
+import { Container, Typography, Paper, Button } from "@mui/material";
 
 const Instructions = () => {
     return (
@@ -23,41 +23,41 @@ const Instructions = () => {
                 <Typography variant="h4" gutterBottom sx={{ fontFamily: 'fantasy', fontWeight: 'bold', color: 'black' }}>
                     Hangman Game Instructions
                 </Typography>
-                <Typography variant="body1" paragraph sx={{ fontFamily: 'fantasy', color: 'black' }}>
-                    Welcome to the Hangman game! Here are the instructions to play:
+                <Typography sx={{
+                    fontFamily: 'fantasy',
+                    color: 'black',
+                }}>
+                    <Typography variant="body1" sx={{ fontFamily: 'fantasy' }}>
+                        You will be given a word to guess.
+                    </Typography>
+                    <Typography variant="body1" sx={{ fontFamily: 'fantasy' }}>
+                        Each letter in the word is initially hidden.
+                    </Typography>
+                    <Typography variant="body1" sx={{ fontFamily: 'fantasy' }}>
+                        Try to guess the word by selecting letters.
+                    </Typography>
+                    <Typography variant="body1" sx={{ fontFamily: 'fantasy' }}>
+                        If you guess a correct letter, it will be revealed in the word.
+                    </Typography>
+                    <Typography variant="body1" sx={{ fontFamily: 'fantasy' }}>
+                        If you guess an incorrect letter, you will lose a try.
+                    </Typography>
+                    <Typography variant="body1" sx={{ fontFamily: 'fantasy' }}>
+                        The game ends when you either guess the word or run out of tries.
+                    </Typography>
+                    <Typography
+                        variant="body1"
+                        sx={{
+                            fontFamily: 'fantasy',
+                            border: '1px solid black',
+                            fontWeight: 'bold',
+                            width: '50%',
+                            margin: '1rem auto'
+                        }}>
+                        Correct Guess: Score + 5 <br />
+                        Incorrect Guess: Score - 2
+                    </Typography>
                 </Typography>
-                <List sx={{ fontFamily: 'fantasy', color: 'black' }}>
-                    <ListItem>
-                        <Typography variant="body1" paragraph sx={{ fontFamily: 'fantasy' }}>
-                            1. You will be given a word to guess.
-                        </Typography>
-                    </ListItem>
-                    <ListItem>
-                        <Typography variant="body1" paragraph sx={{ fontFamily: 'fantasy' }}>
-                            2. Each letter in the word is initially hidden.
-                        </Typography>
-                    </ListItem>
-                    <ListItem>
-                        <Typography variant="body1" paragraph sx={{ fontFamily: 'fantasy' }}>
-                            3. Try to guess the word by selecting letters.
-                        </Typography>
-                    </ListItem>
-                    <ListItem>
-                        <Typography variant="body1" paragraph sx={{ fontFamily: 'fantasy' }}>
-                            4. If you guess a correct letter, it will be revealed in the word.
-                        </Typography>
-                    </ListItem>
-                    <ListItem>
-                        <Typography variant="body1" paragraph sx={{ fontFamily: 'fantasy' }}>
-                            5. If you guess an incorrect letter, you will lose a try.
-                        </Typography>
-                    </ListItem>
-                    <ListItem>
-                        <Typography variant="body1" paragraph sx={{ fontFamily: 'fantasy' }}>
-                            6. The game ends when you either guess the word or run out of tries.
-                        </Typography>
-                    </ListItem>
-                </List>
                 <Typography variant="body1" sx={{ fontFamily: 'fantasy', color: 'black' }}>
                     Good luck and have fun playing Hangman!
                 </Typography>

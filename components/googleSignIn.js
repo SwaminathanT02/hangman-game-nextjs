@@ -34,7 +34,7 @@ const GoogleSignIn = () => {
                 <Typography
                     component="h2"
                     variant="h6"
-                    sx={{ mb: 2 }}>
+                    sx={{ mb: 2, fontFamily: 'fantasy' }}>
                     Other Sign-in Options:
                 </Typography>
                 <Button
@@ -48,8 +48,7 @@ const GoogleSignIn = () => {
                         backgroundColor: "red",
                         fontSize: "0.75em",
                         fontWeight: "900",
-                        px: 2,
-                        py: 1,
+                        padding: '0.5rem 1rem',
                         transition: 'background-color 0.3s ease',
                         '&:hover': {
                             backgroundColor: 'darkred', // Change the color on hover
