@@ -20,7 +20,7 @@ const Instructions = () => {
                     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
                 }}
             >
-                <Typography variant="h3" gutterBottom sx={{ fontFamily: 'fantasy', fontWeight: 'bold', color: 'black' }}>
+                <Typography variant="h4" gutterBottom sx={{ fontFamily: 'fantasy', fontWeight: 'bold', color: 'black' }}>
                     Hangman Game Instructions
                 </Typography>
                 <Typography variant="body1" paragraph sx={{ fontFamily: 'fantasy', color: 'black' }}>
