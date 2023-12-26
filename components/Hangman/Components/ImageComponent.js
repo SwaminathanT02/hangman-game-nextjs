@@ -1,17 +1,17 @@
-import { Image } from "@mui/icons-material";
+import Image from 'next/image';
+import ImageData from '../LoadImages';
+
 
 const ImageComponent = ({ mistakes }) => {
+
     return (
         <Image
-            src={require(`../../../public/images/stick-${mistakes}.png`)}
+            src={ImageData[mistakes]}
             alt={`Stick figure with ${mistakes} mistakes`}
-            sx={{
-                margin: '20px auto',
-                maxWidth: '400px',
-                borderRadius: '100%'
-            }}
-        ></Image>
+            width={400}
+            height={200}
+        />
     );
-}
+};
 
 export default ImageComponent;
