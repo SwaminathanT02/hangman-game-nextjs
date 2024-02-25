@@ -1,5 +1,4 @@
 import OutcomeMessage from "../../components/Hangman/OutcomeMessage";
-import Meaning from "../../components/Hangman/Meaning";
 import { Button, Container } from "@mui/material";
 import { useRouter } from 'next/router';
 

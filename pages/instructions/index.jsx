@@ -1,4 +1,5 @@
-import { Container, Typography, Paper, Button } from "@mui/material";
+import React from 'react';
+import { Container, Typography, Paper, Button, Box, Divider } from "@mui/material";
 
 const Instructions = () => {
     return (
@@ -6,13 +7,14 @@ const Instructions = () => {
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
+                justifyContent: 'center',
                 alignItems: 'center',
                 marginTop: '2rem',
             }}
         >
             <Paper
                 sx={{
-                    width: '70%',
+                    width: { xs: '100%', md: '80%' },
                     padding: '2rem',
                     textAlign: 'center',
                     background: 'linear-gradient(135deg, #E0E0E0 0%, #888888 100%)',
@@ -23,50 +25,52 @@ const Instructions = () => {
                 <Typography variant="h4" gutterBottom sx={{ fontFamily: 'fantasy', fontWeight: 'bold', color: 'black' }}>
                     Hangman Game Instructions
                 </Typography>
-                <Typography sx={{
-                    fontFamily: 'fantasy',
-                    color: 'black',
-                }}>
-                    <Typography variant="body1" sx={{ fontFamily: 'fantasy' }}>
-                        You will be given a word to guess.
-                    </Typography>
-                    <Typography variant="body1" sx={{ fontFamily: 'fantasy' }}>
-                        Each letter in the word is initially hidden.
-                    </Typography>
-                    <Typography variant="body1" sx={{ fontFamily: 'fantasy' }}>
-                        Try to guess the word by selecting letters.
-                    </Typography>
-                    <Typography variant="body1" sx={{ fontFamily: 'fantasy' }}>
-                        If you guess a correct letter, it will be revealed in the word.
-                    </Typography>
-                    <Typography variant="body1" sx={{ fontFamily: 'fantasy' }}>
-                        If you guess an incorrect letter, you will lose a try.
-                    </Typography>
-                    <Typography variant="body1" sx={{ fontFamily: 'fantasy' }}>
-                        The game ends when you either guess the word or run out of tries.
-                    </Typography>
-                    <Typography
-                        variant="body1"
-                        sx={{
-                            fontFamily: 'fantasy',
-                            border: '1px solid black',
-                            fontWeight: 'bold',
-                            width: '50%',
-                            margin: '1rem auto'
-                        }}>
-                        Correct Guess: Score + 5 <br />
-                        Incorrect Guess: Score - 2
-                    </Typography>
-                </Typography>
-                <Typography variant="body1" sx={{ fontFamily: 'fantasy', color: 'black' }}>
-                    Good luck and have fun playing Hangman!
+                <Container sx={{ display: 'flex' }}>
+                    <Box sx={{
+                        fontFamily: 'fantasy',
+                        color: 'black',
+                        maxWidth: { xs: '50%', md: '50%' },
+                        px: { xs: '0.5rem', md: '1rem' },
+                        fontSize: { xs: '0.8rem', md: '1rem' }
+                    }}>
+                        <Typography variant="h6" gutterBottom sx={{ fontFamily: 'fantasy', fontWeight: 'bold', color: 'black', border: '1px solid black' }}>
+                            1P Mode <br />
+                        </Typography>
+                        You will be given a word to guess. Each letter in the word is initially hidden. Try to guess the word by selecting letters. If you guess a correct letter, it will be revealed in the word. If you guess an incorrect letter, you will lose a try. The game ends when you either guess the word or run out of tries.                    </Box>
+                    <Box sx={{
+                        fontFamily: 'fantasy',
+                        color: 'black',
+                        maxWidth: { xs: '50%', md: '50%' },
+                        px: { xs: '0.5rem', md: '1rem' },
+                        fontSize: { xs: '0.8rem', md: '1rem' }
+                    }}>
+                        <Typography variant="h6" gutterBottom sx={{ fontFamily: 'fantasy', fontWeight: 'bold', color: 'black', border: '1px solid black' }}>
+                            2P Mode <br />
+                        </Typography>
+                        Instructions are similar to 1P mode in gameplay. <br />Race against your opponent in guessing the word correctly. If one of the players completes the game, it is game over for both. If both players have exhausted their tries, the player with more correct guesses wins.
+                    </Box>
+                </Container>
+                <Typography
+                    sx={{
+                        fontFamily: 'fantasy',
+                        border: '1px solid black',
+                        fontWeight: 'bold',
+                        width: { xs: '100%', md: '70%' },
+                        margin: '1rem auto',
+                        padding: '0.5rem 0.5rem',
+                        fontSize: { xs: '0.9rem' }
+                    }}>
+                    Score: <br />
+                    Correct Guess: + 5  <br />
+                    Incorrect Guess: - 2
                 </Typography>
                 <Button
                     variant="contained"
                     size="large"
-                    href="/hangman"
+                    href="/"
                     sx={{
-                        marginTop: '1rem',
+                        mt: '0.5rem',
+                        mb: '1rem',
                         fontFamily: 'fantasy',
                         fontWeight: 'bold',
                         backgroundColor: "gray",
@@ -77,6 +81,9 @@ const Instructions = () => {
                 >
                     Start Playing
                 </Button>
+                <Typography variant="body1" sx={{ fontFamily: 'fantasy', color: 'black' }}>
+                    Good luck and have fun playing Hangman!
+                </Typography>
             </Paper>
         </Container>
     );

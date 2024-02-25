@@ -22,7 +22,7 @@ export default function App() {
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
-                height: '70vh',
+                height: '100vh',
                 gap: '5rem'
             }}
             onMouseMove={(e) => { handleMouse(e) }}>

@@ -1,4 +1,4 @@
-import { Button, Box } from "@mui/material";
+import { Button, Box, Divider } from "@mui/material";
 
 const buttonStyle = {
     backgroundColor: 'darkgray',
@@ -25,12 +25,18 @@ const PlayButton = () => {
             sx={{
                 display: 'flex',
                 justifyContent: 'center',
+                flexDirection: 'column',
                 gap: '20px',
             }}
         >
+            <Divider />
             <Button sx={buttonStyle} href="/hangman">
-                CLICK TO PLAY
+                1 PLAYER MODE
             </Button>
+            <Button sx={buttonStyle} href="/hangman-2p">
+                2 PLAYER MODE
+            </Button>
+            <Divider />
             <Button sx={buttonStyle} href="/instructions">
                 Instructions
             </Button>
