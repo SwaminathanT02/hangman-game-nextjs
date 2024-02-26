@@ -4,11 +4,11 @@ import WordDisplay from "./WordDisplay";
 import Keyboard from "./Keyboard";
 import GetDBScore from "./Api/GetScore";
 import UpdateDBScore from "./Api/UpdateScore";
-import FetchWordAndMeaning from "./Api/GetWordAndMeaning";
 import LoadingComponent from "./Components/LoadingComponent";
 import ContainerComponent from "./Components/ContainerComponent";
 import ImageComponent from "./Components/ImageComponent";
 import TypographyComponent from "./Components/TypographyComponent";
+import GET from "../../utils/getWord";
 
 const HangManMain = ({ user }) => {
     const totalTries = 6;
@@ -26,7 +26,7 @@ const HangManMain = ({ user }) => {
     const initializeGame = async () => {
         try {
             setLoading(true);
-            const wordAndMeaning = await FetchWordAndMeaning();
+            const wordAndMeaning = await GET();
             if (score === null) {
                 const userScore = await GetDBScore(user.email);
                 setScore(userScore);

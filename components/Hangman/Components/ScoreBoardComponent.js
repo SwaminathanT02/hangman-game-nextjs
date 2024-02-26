@@ -9,7 +9,7 @@ import Paper from '@mui/material/Paper';
 
 const cellSx = { fontFamily: 'fantasy', fontWeight: 'bold' };
 
-const ScoreboardDisplay = ({ scoreboard, username }) => {
+const ScoreboardDisplay = ({ scoreboard, username, blink = false }) => {
     return (
         <TableContainer
             component={Paper}
@@ -37,7 +37,7 @@ const ScoreboardDisplay = ({ scoreboard, username }) => {
                                 {score.username === username && '(You) '}{score.username}
                             </TableCell>
                             <TableCell sx={cellSx}>{score.score.correctGuesses}</TableCell>
-                            <TableCell sx={cellSx}>{score.score.remainingTries}</TableCell>
+                            <TableCell sx={{ ...cellSx, color: `${blink && score.username === username && 'red'}` }}>{score.score.remainingTries}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

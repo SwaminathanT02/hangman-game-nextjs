@@ -18,7 +18,7 @@ const PrintWordAndMeaning = ({ selectedWord, wordMeanings }) => {
 
             }}>
             <PrintWord selectedWord={selectedWord} />
-            <Meaning wordMeanings={wordMeanings} />
+            {wordMeanings && <Meaning wordMeanings={wordMeanings} />}
         </Container>
     );
 }

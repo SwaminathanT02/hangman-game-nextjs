@@ -12,7 +12,7 @@ import WaitComponent from '../../components/Hangman/WaitComponent';
 import RoomText from '../../components/Hangman/RoomText';
 import ScoreboardDisplay from '../../components/Hangman/Components/ScoreBoardComponent';
 
-const socket = io('https://hangman-game-server-two.vercel.app/');
+let socket;
 
 export const getServerSideProps = async (context) => {
     // Check session and redirect to login page if not logged in
@@ -96,7 +96,10 @@ export default function HangMan2P({ user }) {
         }
     };
 
-    useEffect(() => {
+    async function socketInitializer() {
+        await fetch("/api/socket");
+        socket = io({ path: "/api/ping" });
+
         // Listen for incoming room joined event
         socket.on('room joined', (data) => {
             setWaiting(false);
@@ -165,6 +168,10 @@ export default function HangMan2P({ user }) {
             setGameOver(true);
         });
 
+    }
+
+    useEffect(() => {
+        socketInitializer();
         // Clean up the socket connection when the component unmounts
         return () => {
             socket.disconnect();
@@ -231,7 +238,7 @@ export default function HangMan2P({ user }) {
                                     ) : (
                                         <ContainerComponent>
                                             <ImageComponent mistakes={mistakes} />
-                                            <ScoreboardDisplay scoreboard={scoreboard} username={user.email} />
+                                            <ScoreboardDisplay scoreboard={scoreboard} username={user.email} blink={blink} />
                                             <WordDisplay guessedWord={guessedWord} correctGuessIndexes={correctGuessIndexes} />
                                             <Keyboard handleGuess={handleGuess} gameOver={gameOver} guessedLetters={guessedLetters} />
                                         </ContainerComponent>

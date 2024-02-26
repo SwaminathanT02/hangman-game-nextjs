@@ -1,5 +1,5 @@
 import OutcomeMessage2P from "../../components/Hangman/OutcomeMessage2P";
-import { Button, Container } from "@mui/material";
+import { Button, Container, Typography } from "@mui/material";
 
 const buttonSx = {
     fontSize: "1rem",
@@ -30,7 +30,17 @@ const GameOutcome2P = ({ selectedWord, gameOver, wordMeanings, resetGame, goWait
                 my: "2rem"
             }}>
             {gameOver &&
-                goWait ? (<p>Waiting for other player to complete...</p>)
+                goWait ? (
+                <Typography
+                    sx={{
+                        fontSize: "1.5rem",
+                        color: 'blue',
+                        my: "2rem",
+                        fontFamily: 'fantasy'
+                    }}
+                >
+                    Waiting for the other player to complete...
+                </Typography>)
                 :
                 (
                     <Container>
