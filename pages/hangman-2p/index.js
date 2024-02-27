@@ -1,7 +1,8 @@
 // pages/index.js
 import { useState, useEffect } from 'react';
 import { getSession } from "next-auth/react"
-import io from 'socket.io-client';
+import * as Ably from 'ably';
+import { AblyProvider, useChannel, useConnectionStateListener } from 'ably/react';
 import GameOutcome2P from "../../components/Hangman/GameOutcome2P";
 import WordDisplay from "../../components/Hangman/WordDisplay";
 import Keyboard from "../../components/Hangman/Keyboard";
@@ -12,7 +13,6 @@ import WaitComponent from '../../components/Hangman/WaitComponent';
 import RoomText from '../../components/Hangman/RoomText';
 import ScoreboardDisplay from '../../components/Hangman/Components/ScoreBoardComponent';
 
-let socket;
 
 export const getServerSideProps = async (context) => {
     // Check session and redirect to login page if not logged in
@@ -32,12 +32,26 @@ export const getServerSideProps = async (context) => {
     };
 };
 
-export default function HangMan2P({ user }) {
+export default function App({ user }) {
+
+    // Connect to Ably using the AblyProvider component and your API key
+    const client = new Ably.Realtime.Promise({ key: 'MseN5g.iTAZMA:mu8RzgIwVzqIBlVw95p-pwqTNofoHovLTq2Ks9W6N-Q' });
+
+    return (
+        <AblyProvider client={client}>
+            <HangMan2P user={user} />
+        </AblyProvider>
+    );
+}
+
+
+function HangMan2P({ user }) {
     const [isWaiting, setWaiting] = useState(true);
     const [roomId, setRoom] = useState('');
     const [isUsernameTaken, setUsernameTaken] = useState(false);
     const [hasTwoPlayers, setTwoPlayers] = useState(false);
     const [scoreboard, setScoreboard] = useState(null);
+    const [roomData, setRoomData] = useState(null);
     const [winner, setWinner] = useState('');
     const [goWait, setGOWait] = useState(false);
     const [playAgainDis, setPlayAgainDis] = useState(false);
@@ -50,6 +64,11 @@ export default function HangMan2P({ user }) {
     const [gameOver, setGameOver] = useState(false);
     const [correctGuessIndexes, setCorrectGuessIndexes] = useState([]);
     const [blink, setBlink] = useState(false);
+
+    useConnectionStateListener('connected', () => {
+        console.log('Connected to Ably!');
+    });
+    const { channel } = useChannel('HangMan Server');
 
     const initializeGame = async (wordAndMeaning) => {
         try {
@@ -69,6 +88,7 @@ export default function HangMan2P({ user }) {
 
     const handleGuess = async (letter) => {
         if (!gameOver) {
+            setLoading(true);
             const updatedGuessedWord = [...guessedWord];
             let correctGuess = false;
             let correctGuessedLetters = 0;
@@ -82,88 +102,112 @@ export default function HangMan2P({ user }) {
             }
             if (!correctGuess) {
                 if (!guessedLetters.has(letter)) {
-                    setMistakes((prevMistakes) => prevMistakes + 1);
-                    socket.emit('handle guess', { roomId, username: user.email, correct: false });
+                    setMistakes((prevMistakes) => prevMistakes + 1)
+                    const newData = {
+                        ...roomData, players: roomData.players.map(player => {
+                            if (player.username === user.email) {
+                                player.score.remainingTries--;
+                            }
+                            return player;
+                        })
+                    };
+                    setRoomData(newData);
+                    channel.publish('handle guess', { room: newData, username: user.email });
                     setGuessedLetters((prevGuessedLetters) => new Set(prevGuessedLetters).add(letter));
                 }
             } else {
                 if (!guessedLetters.has(letter)) {
                     setGuessedLetters((prevGuessedLetters) => new Set(prevGuessedLetters).add(letter));
-                    socket.emit('handle guess', { roomId, username: user.email, correct: true, correctGuessedLetters });
+                    const newData = {
+                        ...roomData, players: roomData.players.map(player => {
+                            if (player.username === user.email) {
+                                player.score.correctGuesses += correctGuessedLetters;
+                            }
+                            return player;
+                        })
+                    };
+                    setRoomData(newData);
+                    channel.publish('handle guess', { room: newData, username: user.email });
                 }
                 setGuessedWord(updatedGuessedWord);
             }
         }
     };
 
-    async function socketInitializer() {
-        await fetch("/api/socket");
-        socket = io({ path: "/api/ping" });
+    async function ablyInitializer() {
+        await fetch("/api/ably");
 
         // Listen for incoming room joined event
-        socket.on('room joined', (data) => {
+        channel.subscribe(`room joined ${user.email}`, (data) => {
             setWaiting(false);
-            setRoom(data.roomId);
-            if (data?.players.length === 1) {
+            setRoom(data.data.room.roomId);
+            setRoomData(data.data.room);
+            if (data.data.room.players.length === 1) {
                 setTwoPlayers(false);
             }
-            else if (data?.players.length === 2) {
+            else if (data.data.room.players.length === 2) {
                 setTwoPlayers(true);
                 setLoading(true);
-                socket.emit('initialize game', { roomId: data.roomId, data });
+                if (data.data.initializer) channel.publish('initialize game', { room: data.data.room, username: user.email });
             }
         });
 
         // Listen for username taken event
-        socket.on('username taken', () => {
+        channel.subscribe(`username taken ${user.email}`, () => {
             setUsernameTaken(true);
         });
 
         // Listen for word once room is full
-        socket.on('get word', (data) => {
-            setScoreboard(data.data.players.map((player) => { return { id: player.id, username: player.username, score: { correctGuesses: 0, remainingTries: 6 } } }))
+        channel.subscribe(`get word ${user.email}`, (data) => {
+            setScoreboard(data.data.data.players.map((player) => { return { username: player.username, score: { correctGuesses: 0, remainingTries: 6 } } }))
             setLoading(true);
-            initializeGame(data?.wordInfo);
+            setRoomData(data.data.data);
+            initializeGame(data.data?.wordInfo);
         });
 
         // Listen for chat messages
-        socket.on('update scoreboard', (data) => {
-            setScoreboard(data.players.map((player) => { return { id: player.id, username: player.username, score: player.score } }));
-            if ((data.players[0].username === user.email && data.players[0].score.remainingTries === 0) ||
-                (data.players[1].username === user.email && data.players[1].score.remainingTries === 0)) {
+        channel.subscribe(`update scoreboard ${user.email}`, (data) => {
+            setRoomData(data.data.room);
+            setScoreboard(data.data.room.players.map((player) => { return { username: player.username, score: player.score } }));
+            if ((data.data.room.players[0].username === user.email && data.data.room.players[0].score.remainingTries === 0) ||
+                (data.data.room.players[1].username === user.email && data.data.room.players[1].score.remainingTries === 0)) {
                 setGameOver(true);
                 setGOWait(true);
             };
-            if (data.players[0].score.correctGuesses === data.totalLetters ||
-                data.players[1].score.correctGuesses === data.totalLetters ||
-                (data.players[0].score.remainingTries === 0 && data.players[1].score.remainingTries === 0)) {
+            if (data.data.room.players[0].score.correctGuesses === data.data.room.totalLetters ||
+                data.data.room.players[1].score.correctGuesses === data.data.room.totalLetters ||
+                (data.data.room.players[0].score.remainingTries === 0 && data.data.room.players[1].score.remainingTries === 0)) {
                 setGameOver(true);
                 setGOWait(false);
             };
             if (winner === '') {
-                if (data.players[0].score.correctGuesses === data.totalLetters) setWinner(data.players[0].username);
-                else if (data.players[1].score.correctGuesses === data.totalLetters) setWinner(data.players[1].username);
-                else if (data.players[0].score.remainingTries === 0 && data.players[1].score.remainingTries === 0) {
-                    if (data.players[0].score.correctGuesses > data.players[1].score.correctGuesses) setWinner(data.players[0].username);
-                    else if (data.players[0].score.correctGuesses < data.players[1].score.correctGuesses) setWinner(data.players[1].username);
+                if (data.data.room.players[0].score.correctGuesses === data.data.room.totalLetters) setWinner(data.data.room.players[0].username);
+                else if (data.data.room.players[1].score.correctGuesses === data.data.room.totalLetters) setWinner(data.data.room.players[1].username);
+                else if (data.data.room.players[0].score.remainingTries === 0 && data.data.room.players[1].score.remainingTries === 0) {
+                    if (data.data.room.players[0].score.correctGuesses > data.data.room.players[1].score.correctGuesses) setWinner(data.data.room.players[0].username);
+                    else if (data.data.room.players[0].score.correctGuesses < data.data.room.players[1].score.correctGuesses) setWinner(data.data.room.players[1].username);
                     else setWinner("Tie");
                 };
             }
-
+            setLoading(false);
         });
 
         // Listen for play again info
-        socket.on('play again', ({ info, data, roomId }) => {
-            if (info === 'play') {
+        channel.subscribe(`play again ${user.email}`, (data) => {
+            if (data.data.info === 'wait') {
+                setRoomData(data.data.data)
+            }
+            else if (data.data.info === 'play') {
                 setGOWait(true);
                 setLoading(true);
                 setPlayAgainDis(false);
-                socket.emit('initialize game', { roomId, data });
+                setRoomData(data.data.data)
+                if (data.data.initializer) channel.publish('initialize game', { room: data.data.data, username: user.email });
             }
         });
 
         // Listen for user left event
-        socket.on('user left', (data) => {
+        channel.subscribe(`user left ${user.email}`, (data) => {
             setTwoPlayers(false);
             setGameOver(true);
         });
@@ -171,10 +215,10 @@ export default function HangMan2P({ user }) {
     }
 
     useEffect(() => {
-        socketInitializer();
-        // Clean up the socket connection when the component unmounts
+        ablyInitializer();
+        // Clean up the Ably connection when the component unmounts
         return () => {
-            socket.disconnect();
+            channel.publish('leave room', { room: roomData, username: user.email });
         };
     }, []);
 
@@ -190,20 +234,21 @@ export default function HangMan2P({ user }) {
     }, [mistakes]);
 
     const handleLeaveRoom = () => {
-        socket.emit('leave room', { roomId, scoreboard, username: user.email });
+        channel.publish('leave room', { room: roomData, username: user.email });
         setWaiting(true);
         setRoom('');
+        setRoomData(null);
         setTwoPlayers(false);
     };
 
     const handleJoinRoom = () => {
         setUsernameTaken(false);
-        socket.emit('set username', user.email);
+        channel.publish('set username', user.email);
     };
 
     const handlePlayAgain = () => {
         setPlayAgainDis(true);
-        socket.emit('play again', { roomId, username: user.email })
+        channel.publish('play again', { room: roomData, username: user.email })
     }
 
     return (
@@ -214,7 +259,7 @@ export default function HangMan2P({ user }) {
                 hasTwoPlayers
                     ?
                     (<>
-                        <RoomText handleLeaveRoom={handleLeaveRoom} text={`Room ID: ${`${btoa(roomId).slice(btoa(roomId).length - 5)}`}`} color={'green'} />
+                        <RoomText handleLeaveRoom={handleLeaveRoom} text={`Room ID: ${roomId}`} color={'green'} />
                         <>
                             {(loading)
                                 ? <LoadingComponent />

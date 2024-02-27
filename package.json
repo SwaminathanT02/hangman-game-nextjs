@@ -12,6 +12,7 @@
     "@mui/icons-material": "^5.15.1",
     "@mui/material": "^5.15.1",
     "@vercel/speed-insights": "^1.0.2",
+    "ably": "^1.2.49",
     "axios": "^1.6.2",
     "bcryptjs": "^2.4.3",
     "framer-motion": "^10.16.16",
