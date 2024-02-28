@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const wordApiServer = process.env.WORD_API_SERVER;
-const meaningApiServer = process.env.MEANING_API_SERVER;
+const wordApiServer = process.env.NEXT_PUBLIC_WORD_API_SERVER;
+const meaningApiServer = process.env.NEXT_PUBLIC_MEANING_API_SERVER;
 
 const fetchWord = async () => {
     try {
