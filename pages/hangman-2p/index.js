@@ -35,7 +35,7 @@ export const getServerSideProps = async (context) => {
 export default function App({ user }) {
 
     // Connect to Ably using the AblyProvider component and your API key
-    const client = new Ably.Realtime.Promise({ key: 'MseN5g.iTAZMA:mu8RzgIwVzqIBlVw95p-pwqTNofoHovLTq2Ks9W6N-Q' });
+    const client = new Ably.Realtime.Promise({ key: process.env.NEXT_PUBLIC_ABLY_SECRET });
 
     return (
         <AblyProvider client={client}>

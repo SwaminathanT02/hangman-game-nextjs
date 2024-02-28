@@ -4,7 +4,7 @@ import Connect from "../../utils/db";
 import Room from "../../models/Room";
 
 export default async function handler(req, res) {
-    const ably = new Ably.Realtime.Promise({ key: 'MseN5g.iTAZMA:mu8RzgIwVzqIBlVw95p-pwqTNofoHovLTq2Ks9W6N-Q' });
+    const ably = new Ably.Realtime.Promise({ key: process.env.NEXT_PUBLIC_ABLY_SECRET });
     ably.connection.once("connected", () => {
         console.log("Server Connected to Ably!")
     })
