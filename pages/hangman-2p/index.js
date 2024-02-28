@@ -7,7 +7,6 @@ import WordDisplay from "../../components/Hangman/WordDisplay";
 import Keyboard from "../../components/Hangman/Keyboard";
 import LoadingComponent from "../../components/Hangman/Components/LoadingComponent";
 import ContainerComponent from "../../components/Hangman/Components/ContainerComponent";
-import ImageComponent from "../../components/Hangman/Components/ImageComponent";
 import WaitComponent from '../../components/Hangman/WaitComponent';
 import RoomText from '../../components/Hangman/RoomText';
 import ScoreboardDisplay from '../../components/Hangman/Components/ScoreBoardComponent';
@@ -175,7 +174,6 @@ export default function HangMan2P({ user }) {
 
         // Listen for play again info
         socket.on(`play again`, (data) => {
-            console.log(data.room);
             if (data.info === 'wait') {
                 setRoomData(data.room)
             }
@@ -248,7 +246,6 @@ export default function HangMan2P({ user }) {
                                 : (
                                     gameOver ? (
                                         <ContainerComponent>
-                                            <ImageComponent mistakes={mistakes} />
                                             <GameOutcome2P
                                                 selectedWord={selectedWord}
                                                 gameOver={gameOver}
@@ -264,7 +261,6 @@ export default function HangMan2P({ user }) {
                                         </ContainerComponent>
                                     ) : (
                                         <ContainerComponent>
-                                            <ImageComponent mistakes={mistakes} />
                                             <ScoreboardDisplay scoreboard={scoreboard} username={user.email} blink={blink} />
                                             <WordDisplay guessedWord={guessedWord} correctGuessIndexes={correctGuessIndexes} />
                                             <Keyboard handleGuess={handleGuess} gameOver={gameOver} guessedLetters={guessedLetters} />

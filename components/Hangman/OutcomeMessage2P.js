@@ -1,4 +1,4 @@
-import { Container, Typography } from "@mui/material";
+import { Container } from "@mui/material";
 import Meaning from "./Meaning";
 import PrintWord from "./PrintWord";
 import ScoreboardDisplay from "./Components/ScoreBoardComponent";
@@ -26,7 +26,7 @@ const PrintWordAndMeaning = ({ selectedWord, wordMeanings }) => {
 
 // --- OUTCOME MESSAGE COMPONENT ---
 const OutcomeMessage2P = ({ selectedWord, wordMeanings, winner, scoreboard, username }) => (
-    <Typography
+    <Container
         sx={{
             display: 'flex',
             flexDirection: 'column',
@@ -39,7 +39,7 @@ const OutcomeMessage2P = ({ selectedWord, wordMeanings, winner, scoreboard, user
         {username === winner ? 'YOU WIN!' : winner === 'Tie' ? 'IT IS A TIE!' : 'YOU LOSE!'}
         <PrintWordAndMeaning selectedWord={selectedWord} wordMeanings={wordMeanings} />
         <ScoreboardDisplay scoreboard={scoreboard} username={username} />
-    </Typography>
+    </Container>
 
 );
 

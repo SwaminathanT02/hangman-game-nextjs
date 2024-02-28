@@ -52,10 +52,6 @@ const GameOutcome2P = ({ selectedWord, gameOver, wordMeanings, resetGame, goWait
                             disabled={playAgainDis}>
                             {playAgainDis ? "Waiting for other player to vote..." : "Play Again (Vote)"}
                         </Button>
-                        <Button
-                            onClick={() => { leaveGame(); }}
-                            sx={{ ...buttonSx, ml: '1rem' }}
-                            disabled={playAgainDis}> Leave Game </Button>
                         <OutcomeMessage2P selectedWord={selectedWord} wordMeanings={wordMeanings} winner={winner} scoreboard={scoreboard} username={username} />
                     </Container>
                 )}

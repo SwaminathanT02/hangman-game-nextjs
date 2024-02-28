@@ -1,4 +1,4 @@
-import { Card, Container, Typography } from "@mui/material";
+import { Container } from "@mui/material";
 import Meaning from "./Meaning";
 import PrintWord from "./PrintWord";
 
@@ -25,7 +25,7 @@ const PrintWordAndMeaning = ({ selectedWord, wordMeanings }) => {
 
 // --- OUTCOME MESSAGE COMPONENT ---
 const OutcomeMessage = ({ mistakes, selectedWord, gameOver, totalTries, wordMeanings }) => (
-    <Typography
+    <Container
         sx={{
             display: 'flex',
             flexDirection: 'column',
@@ -47,7 +47,7 @@ const OutcomeMessage = ({ mistakes, selectedWord, gameOver, totalTries, wordMean
                 </>
             )
         ) : null}
-    </Typography>
+    </Container>
 );
 
 export default OutcomeMessage;

@@ -11,7 +11,7 @@ const RoomText = ({ handleLeaveRoom, text, color }) => {
         }}>
             <Typography
                 sx={{
-                    fontSize: "1.5rem",
+                    fontSize: { xs: '1.2rem', md: "1.5rem" },
                     color: `${color}`,
                     my: "2rem",
                     fontFamily: 'fantasy'
@@ -22,8 +22,8 @@ const RoomText = ({ handleLeaveRoom, text, color }) => {
             <Button
                 onClick={handleLeaveRoom}
                 sx={{
-                    fontSize: "1rem",
-                    padding: "0.8rem 1.5rem",
+                    fontSize: { xs: '0.9rem', md: "1rem" },
+                    padding: { xs: "0.7rem 1.3rem", md: "0.8rem 1.5rem" },
                     backgroundColor: "darkgray",
                     color: "black",
                     fontWeight: '900',

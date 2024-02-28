@@ -13,7 +13,7 @@ export const getServerSideProps = async (context) => {
     }
 
     // Fetch top scorers from your API
-    const response = await fetch(`${process.env.NEXTAUTH_URL}/api/get-leaderboard`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SOCKET_SERVER_URL}/api/get-leaderboard`);
     const topScorers = await response.json();
 
     return {

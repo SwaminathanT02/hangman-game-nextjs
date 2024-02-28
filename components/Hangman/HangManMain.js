@@ -6,7 +6,6 @@ import GetDBScore from "./Api/GetScore";
 import UpdateDBScore from "./Api/UpdateScore";
 import LoadingComponent from "./Components/LoadingComponent";
 import ContainerComponent from "./Components/ContainerComponent";
-import ImageComponent from "./Components/ImageComponent";
 import TypographyComponent from "./Components/TypographyComponent";
 import GET from "../../utils/getWord";
 
@@ -116,8 +115,7 @@ const HangManMain = ({ user }) => {
                 : (
                     gameOver ? (
                         <ContainerComponent>
-                            <ImageComponent mistakes={mistakes} />
-                            <TypographyComponent color={'blue'}>
+                            <TypographyComponent color={'blue'} sxExtra={{ mt: '5rem' }}>
                                 SCORE: {score}
                             </TypographyComponent>
                             <GameOutcome
@@ -131,8 +129,7 @@ const HangManMain = ({ user }) => {
                         </ContainerComponent>
                     ) : (
                         <ContainerComponent>
-                            <ImageComponent mistakes={mistakes} />
-                            <TypographyComponent color={'green'}>
+                            <TypographyComponent color={'green'} sxExtra={{ mt: '5rem' }}>
                                 SCORE: {score}
                             </TypographyComponent>
                             <TypographyComponent sxExtra={{ color: blink ? 'red' : 'blue' }}>
