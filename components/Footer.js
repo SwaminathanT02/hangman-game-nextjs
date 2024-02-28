@@ -14,7 +14,7 @@ function Copyright() {
         <Container sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Typography variant="body2" color="text.secondary">
                 {'Copyright © '}
-                <Link color="inherit" href="https://hangman-game-delta-ochre.vercel.app/">
+                <Link color="inherit" href="https://hangman-game-nextjs.onrender.com/">
                     HangMan
                 </Link>{' '}
                 {new Date().getFullYear()}
