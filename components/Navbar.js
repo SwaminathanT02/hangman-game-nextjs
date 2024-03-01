@@ -18,9 +18,17 @@ const boxSx = {
     fontSize: '1rem'
 }
 
+const menuIconSx = {
+    transition: 'transform 0.2s ease-in-out',
+    ':hover': {
+        transform: 'scale(1.2)'
+    }
+}
+
 const Navbar = () => {
     const [user, setUser] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
+    const [signOutDisabled, setSignOutDisable] = useState(false);
     const { data: session } = useSession();
     const settings = [];
     const handleOpenSettingsMenu = (event) => {
@@ -50,7 +58,7 @@ const Navbar = () => {
             position="static"
             style={{ background: 'white' }}>
             <Toolbar sx={{ borderRadius: '10px', overflow: 'hidden', justifyContent: 'space-between' }}>
-                <Box style={{ display: 'flex', alignItems: 'center' }}>
+                <Box style={{ display: 'flex', alignItems: 'center' }} sx={menuIconSx}>
                     <SentimentSatisfiedAltIcon sx={{ color: 'black' }}></SentimentSatisfiedAltIcon>
                     <Typography
                         variant="h5"
@@ -79,8 +87,8 @@ const Navbar = () => {
                             <Tooltip title="Settings">
                                 <IconButton onClick={handleOpenSettingsMenu} sx={{ p: 0 }}>
                                     {session?.user?.image
-                                        ? <Avatar alt="User Icon" src={session?.user?.image} />
-                                        : <MenuIcon></MenuIcon>}
+                                        ? <Avatar sx={menuIconSx} alt="User Icon" src={session?.user?.image} />
+                                        : <MenuIcon sx={menuIconSx}></MenuIcon>}
                                 </IconButton>
                             </Tooltip>
                             <Menu
@@ -110,13 +118,13 @@ const Navbar = () => {
                                 {settings.map((setting) => (
                                     <MenuItem key={setting.name} onClick={handleCloseSettingsMenu} sx={{ justifyContent: "center", fontFamily: "fantasy" }}>
                                         {setting.name === 'Logout'
-                                            ? <Button sx={boxSx} onClick={() => { signOut({ callbackUrl: '/' }) }}>{setting.name}</Button>
-                                            : <Button sx={boxSx} href={setting.Url}>{setting.name}</Button>}
+                                            ? <Button sx={{ ...boxSx, ...menuIconSx }} disabled={signOutDisabled} onClick={() => { signOut({ callbackUrl: '/' }); setSignOutDisable(true); }}>{signOutDisabled ? 'Logging out...' : setting.name}</Button>
+                                            : <Button sx={{ ...boxSx, ...menuIconSx }} href={setting.Url}>{setting.name}</Button>}
                                     </MenuItem>
                                 ))}
                             </Menu>
                         </>)
-                        : (<Button sx={boxSx} href='/login'>Sign-in</Button>)}
+                        : (<Button sx={{ ...boxSx, ...menuIconSx }} href='/login'>Sign-in</Button>)}
                 </Box>
             </Toolbar>
         </AppBar>

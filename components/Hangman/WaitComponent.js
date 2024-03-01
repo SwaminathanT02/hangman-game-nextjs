@@ -1,6 +1,8 @@
 import { Container, Button, Typography } from "@mui/material";
+import { useState } from "react";
 
 const WaitComponent = ({ handleJoinRoom, isUsernameTaken }) => {
+    const [buttonDisabled, setButtonDisable] = useState(false);
     return (
         <Container
             sx={{
@@ -21,7 +23,7 @@ const WaitComponent = ({ handleJoinRoom, isUsernameTaken }) => {
                 Click to Play:
             </Typography>
             <Button
-                onClick={handleJoinRoom}
+                onClick={() => { handleJoinRoom(); setButtonDisable(true); }}
                 sx={{
                     fontSize: "1rem",
                     padding: "0.8rem 1.5rem",
@@ -37,8 +39,10 @@ const WaitComponent = ({ handleJoinRoom, isUsernameTaken }) => {
                     '&:hover': {
                         backgroundColor: 'gray'
                     }
-                }} >
-                Find Game
+                }}
+                disabled={buttonDisabled}>
+                {buttonDisabled ? 'Finding Game...' : 'Find Game'}
+
             </Button>
             <Typography
                 sx={{

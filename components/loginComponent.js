@@ -21,6 +21,7 @@ const SignIn = () => {
     const [emailErrorText, setEmailErrorText] = useState("");
     const [passwordError, setpasswordError] = useState(false);
     const [passwordErrorText, setPasswordErrorText] = useState("");
+    const [buttonDisabled, setButtonDisable] = useState(false);
     const callbackUrl = router.query.callbackUrl || "/"; // Default to root if not provided
     const isValidEmail = (email) => {
         const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
@@ -29,16 +30,19 @@ const SignIn = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setButtonDisable(true);
         const data = new FormData(event.currentTarget);
         const email = data.get('email');
         const password = data.get('password');
         if (!isValidEmail(email)) {
             setEmailError(true);
+            setButtonDisable(false);
             setEmailErrorText("Invalid Email Address");
             return;
         }
         if (!password || password.length < 8) {
             setpasswordError(true);
+            setButtonDisable(false);
             setPasswordErrorText((!password ? "Please enter a password." : "Password should contain a minimum of 8 characters."));
             return;
         }
@@ -49,12 +53,15 @@ const SignIn = () => {
         });
         if (result?.error === "CredentialsSignin") {
             setEmailError(true);
+            setButtonDisable(false);
             setEmailErrorText("Invalid email or password");
         } else if (result?.error === "Error: Illegal arguments: string, undefined") {
             setEmailError(true);
+            setButtonDisable(false);
             setEmailErrorText("Email is registered with Google. Please use Google login.");
         } else if (result?.error) {
             setEmailError(true);
+            setButtonDisable(false);
             setEmailErrorText("Something went wrong. Please try again later.");
         } else {
             setEmailError(false);
@@ -113,8 +120,9 @@ const SignIn = () => {
                                     fullWidth
                                     variant="contained"
                                     sx={{ mt: 3, mb: 2 }}
+                                    disabled={buttonDisabled}
                                 >
-                                    Sign In
+                                    {buttonDisabled ? "Signing in..." : "Sign In"}
                                 </Button>
                                 <Grid container>
                                     <Grid item>

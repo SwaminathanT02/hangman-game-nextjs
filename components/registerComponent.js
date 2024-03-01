@@ -24,6 +24,7 @@ const SignUp = () => {
     const [emailErrorText, setEmailErrorText] = useState("");
     const [passwordError, setpasswordError] = useState(false);
     const [passwordErrorText, setPasswordErrorText] = useState("");
+    const [buttonDisabled, setButtonDisable] = useState(false);
 
     const isValidEmail = (email) => {
         const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
@@ -36,6 +37,7 @@ const SignUp = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setButtonDisable(true);
         const data = new FormData(event.currentTarget);
         const firstName = data.get('firstName');
         const lastName = data.get('lastName');
@@ -43,21 +45,25 @@ const SignUp = () => {
         const password = data.get('password');
         if (!firstName || !isValidName(firstName)) {
             setFirstNameError(true);
+            setButtonDisable(false);
             setFirstNameErrorText((!firstName ? "First Name cannot be Empty" : "First Name should contain alphabetical characters only."));
             return;
         }
         if (!lastName || !isValidName(lastName)) {
             setLastNameError(true);
+            setButtonDisable(false);
             setLastNameErrorText((!lastName ? "Last Name cannot be empty" : "Last Name should contain alphabetical characters only."));
             return;
         }
         if (!isValidEmail(email)) {
             setEmailError(true);
+            setButtonDisable(false);
             setEmailErrorText("Invalid Email Address");
             return;
         }
         if (!password || password.length < 8) {
             setpasswordError(true);
+            setButtonDisable(false);
             setPasswordErrorText((!password ? "Please enter a password." : "Password should contain a minimum of 8 characters."));
             return;
         }
@@ -76,6 +82,7 @@ const SignUp = () => {
             });
             if (res.status === 400) {
                 setEmailError(true);
+                setButtonDisable(false);
                 setEmailErrorText("Email is already registered with us.")
             }
             if (res.status === 200) {
@@ -83,6 +90,7 @@ const SignUp = () => {
             }
         } catch (error) {
             setEmailError(true);
+            setButtonDisable(false);
             setEmailErrorText("Something went wrong. Try again!")
             console.log(error);
         }
@@ -170,8 +178,9 @@ const SignUp = () => {
                                     fullWidth
                                     variant="contained"
                                     sx={{ mt: 3, mb: 2 }}
+                                    disabled={buttonDisabled}
                                 >
-                                    Sign Up
+                                    {buttonDisabled ? 'Signing up...' : 'Sign Up'}
                                 </Button>
                                 <Grid container justifyContent="flex-end">
                                     <Grid item>

@@ -19,7 +19,7 @@ const buttonSx = {
 };
 
 // --- GAMEOUTCOME FUNCTION ---
-const GameOutcome2P = ({ selectedWord, gameOver, wordMeanings, resetGame, goWait, leaveGame, playAgainDis, winner, scoreboard, username }) => {
+const GameOutcome2P = ({ selectedWord, gameOver, wordMeanings, resetGame, goWait, playAgainDis, winner, scoreboard, username }) => {
     return (
         <Container
             sx={{

@@ -6,9 +6,11 @@ import Button from '@mui/material/Button';
 import GoogleIcon from '@mui/icons-material/Google';
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/router";
+import { useState } from 'react';
 
 
 const GoogleSignIn = () => {
+    const [buttonDisabled, setButtonDisable] = useState(false);
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
     const router = useRouter();
@@ -38,23 +40,25 @@ const GoogleSignIn = () => {
                     Other Sign-in Options:
                 </Typography>
                 <Button
-                    onClick={() => signIn("google", { callbackUrl: callbackUrl })}
+                    onClick={() => { signIn("google", { callbackUrl: callbackUrl }); setButtonDisable(true); }}
                     sx={{
                         display: 'flex',
                         justifyContent: "center",
                         alignContent: "center",
                         alignItems: "center",
-                        color: "white",
-                        backgroundColor: "red",
+                        color: 'black',
+                        backgroundColor: "white",
                         fontSize: "0.75em",
                         fontWeight: "900",
                         padding: '0.5rem 1rem',
+                        border: '1px solid black',
                         transition: 'background-color 0.3s ease',
                         '&:hover': {
-                            backgroundColor: 'darkred', // Change the color on hover
+                            backgroundColor: 'lightgray', // Change the color on hover
                         }
-                    }}>
-                    Sign-in with <GoogleIcon sx={{ ml: 0.5, fontSize: "1.2em" }} />
+                    }}
+                    disabled={buttonDisabled}>
+                    {buttonDisabled ? (<>Signing in... <GoogleIcon sx={{ ml: 1, fontSize: "2em", color: 'red' }} /></>) : (<>Sign-in with <GoogleIcon sx={{ ml: 1, fontSize: "2em", color: 'red' }} /></>)}
                 </Button>
             </Grid>
         </>);

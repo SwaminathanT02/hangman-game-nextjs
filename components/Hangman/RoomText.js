@@ -1,6 +1,8 @@
 import { Button, Typography, Container } from "@mui/material";
+import { useState } from 'react';
 
 const RoomText = ({ handleLeaveRoom, text, color }) => {
+    const [buttonDisabled, setButtonDisable] = useState(false);
     return (
         <Container sx={{
             display: 'flex',
@@ -20,7 +22,7 @@ const RoomText = ({ handleLeaveRoom, text, color }) => {
                 {text}
             </Typography>
             <Button
-                onClick={handleLeaveRoom}
+                onClick={() => { handleLeaveRoom(); setButtonDisable(true); }}
                 sx={{
                     fontSize: { xs: '0.9rem', md: "1rem" },
                     padding: { xs: "0.7rem 1.3rem", md: "0.8rem 1.5rem" },
@@ -37,8 +39,9 @@ const RoomText = ({ handleLeaveRoom, text, color }) => {
                         backgroundColor: 'gray'
                     }
                 }}
+                disabled={buttonDisabled}
             >
-                Leave Room
+                {buttonDisabled ? 'Leaving Room...' : 'Leave Room'}
             </Button>
         </Container>
     );
